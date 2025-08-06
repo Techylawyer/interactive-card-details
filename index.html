@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="media.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
@@ -12,20 +12,24 @@
   <main>
     <section class="card-img-section">
       <img src="./images/bg-card-back.png" alt="card-back-img" id="card-back-img">
-      <p id="card-cvv-img">000</p>
+      <span id="card-cvc-img">000</span>
       <img src="./images/bg-card-front.png" alt="card-front-img" id="card-front-img">
       <img src="./images/card-logo.svg" alt="card-logo" id="card-logo-img">
-      <p id="card-number-img">0000 0000 0000 0000</p>
-      <p id="card-name-img">Jane Appleseed</p>
-      <p id="card-expiry-img">00/00</p>
+      <span id="card-number-img">0000 0000 0000 0000</span>
+      <span id="card-name-img">Jane Appleseed</span>
+      <span id="card-expiry-img"><span id="card-month-img">00</span>/<span id="card-year-img">00</span></span>
     </section>
 
     <form action="" id="card-form">
+
       <label for="card-name">Cardholder Name</label>
       <input type="text" name="card-name" id="card-name" placeholder=" e.g. Jane Appleseed" autofocus required>
 
+
+
       <label for="card-number">Card Number</label>
       <input type="text" name="card-number" id="card-number" placeholder=" e.g. 1234 5678 9123 0000" required>
+
 
       <div class="cvc-date">
 
@@ -40,25 +44,36 @@
           </div>
         </div>
 
+        <!-- <div class="expiry-group">
+          <span class="group-label">Exp. Date (MM/YY)</span>
+          <div class="input-date-group">
+            <label for="month" class="visually-hidden">Month</label>
+            <input type="text" id="month" name="month" placeholder="MM" maxlength="2">
+            <label for="year" class="visually-hidden">Year</label>
+            <input type="text" id="year" name="year" placeholder="YY" maxlength="2">
+          </div>
+        </div> -->
+
         <div class="cvc-section">
           <label for="cvc">CVC</label>
-          <input type="number" name="card-cvc" id="card-cvc" placeholder="e.g. 123" maxlength="3" required>
+          <input type="text" name="card-cvc" id="card-cvc" placeholder="e.g. 123" maxlength="3" required>
         </div>
       </div>
+
 
       <button type="submit" id="submit-btn">Confirm</button>
 
     </form>
   </main>
 
-  <aside>
+  <aside class="hidden">
     <img src="./images/icon-complete.svg" alt="icon-complete">
     <h1>Thank you!</h1>
     <p>We've added your card details</p>
     <button>Continue</button>
   </aside>
 
-
+  <script src="./script.js"></script>
 </body>
 
 </html>
