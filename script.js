@@ -58,8 +58,7 @@ function isValidCardNumber(number) {
 
 function isValidMonth(month) {
   if (!month.trim()) return "Can't be blank"
-  if (!/^\d{2}$/.test(month)) return 'Must be 2 digits'
-  if (+month < 1 || +month > 12) return 'Must be between 01 and 12'
+  if (+month < 1 || +month > 12) return 'Must be between 1 and 12'
   return true
 }
 
@@ -80,8 +79,8 @@ function isValidCVC(cvc) {
 
 function isFutureDate(month, year) {
   const now = new Date()
-  const currentMonth = now.getMonth() + 1 // JS months are 0-based
-  const currentYear = now.getFullYear() % 100 // Last two digits
+  const currentMonth = now.getMonth() + 1
+  const currentYear = now.getFullYear() % 100
 
   const inputMonth = parseInt(month, 10)
   const inputYear = parseInt(year, 10)
@@ -126,7 +125,19 @@ cardCVCInput.addEventListener('input', (e) => {
 })
 
 cardMonthInput.addEventListener('input', (e) => {
-  expiryMonthDisplay.textContent = e.target.value || '00'
+  let value = e.target.value.replace(/\D/g, '')
+
+  e.target.value = value
+  expiryMonthDisplay.textContent = value || '00'
+})
+
+cardMonthInput.addEventListener('blur', (e) => {
+  let value = e.target.value
+  if (value.length === 1) {
+    value = '0' + value
+    e.target.value = value
+    expiryMonthDisplay.textContent = value
+  }
 })
 
 cardYearInput.addEventListener('input', (e) => {
@@ -156,11 +167,11 @@ form.addEventListener('submit', (e) => {
     isValid = false
   }
 
-    const yearValidation = isValidYear(cardYearInput.value)
-    if (yearValidation !== true) {
-      showError(cardYearInput, yearValidation)
-      isValid = false
-    }
+  const yearValidation = isValidYear(cardYearInput.value)
+  if (yearValidation !== true) {
+    showError(cardYearInput, yearValidation)
+    isValid = false
+  }
 
   if (monthValidation === true && yearValidation === true) {
     if (!isFutureDate(cardMonthInput.value, cardYearInput.value)) {
