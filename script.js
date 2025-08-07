@@ -25,6 +25,7 @@ const cardCVCDisplay = document.getElementById('card-cvc-img')
 
 function formatCardNumber(value) {
   return value
+    .replace(/\D/g, '')
     .substring(0, 16)
     .replace(/(.{4})/g, '$1 ')
     .trim()
@@ -32,8 +33,7 @@ function formatCardNumber(value) {
 
 function showError(input, message) {
   const error = input.nextElementSibling
-  console.log(error)
-  console.log(input)
+
   error.textContent = message
   input.classList.add('error-border')
 }
@@ -64,8 +64,11 @@ function isValidMonth(month) {
 }
 
 function isValidYear(year) {
+  const currentYear = new Date().getFullYear() % 100
+
   if (!year.trim()) return "Can't be blank"
   if (!/^\d{2}$/.test(year)) return 'Must be 2 digits'
+  if (+year < currentYear) return "Year can't be in the past"
   return true
 }
 
@@ -75,14 +78,47 @@ function isValidCVC(cvc) {
   return true
 }
 
+function isFutureDate(month, year) {
+  const now = new Date()
+  const currentMonth = now.getMonth() + 1 // JS months are 0-based
+  const currentYear = now.getFullYear() % 100 // Last two digits
+
+  const inputMonth = parseInt(month, 10)
+  const inputYear = parseInt(year, 10)
+
+  if (
+    inputYear < currentYear ||
+    (inputYear === currentYear && inputMonth < currentMonth)
+  ) {
+    return false
+  }
+
+  return true
+}
+
 cardNameInput.addEventListener('input', (e) => {
   cardNameDisplay.textContent = e.target.value || 'Jane Appleseed'
 })
 
 cardNumberInput.addEventListener('input', (e) => {
-  const formatted = formatCardNumber(e.target.value)
-  e.target.value = formatted
-  cardNumberDisplay.textContent = formatted || '0000 0000 0000 0000'
+  const input = e.target
+  let cursorPosition = input.selectionStart
+  let formattedValue = formatCardNumber(input.value)
+
+  const prevSpacesBeforeCursor = (
+    input.value.slice(0, cursorPosition).match(/ /g) || []
+  ).length
+
+  const cursorRawPosition = cursorPosition - prevSpacesBeforeCursor
+
+  let newCursorPosition = cursorRawPosition
+  newCursorPosition += Math.floor(cursorRawPosition / 4)
+
+  input.value = formattedValue
+
+  input.setSelectionRange(newCursorPosition, newCursorPosition)
+
+  cardNumberDisplay.textContent = formattedValue || '0000 0000 0000 0000'
 })
 
 cardCVCInput.addEventListener('input', (e) => {
@@ -120,10 +156,18 @@ form.addEventListener('submit', (e) => {
     isValid = false
   }
 
-  const yearValidation = isValidYear(cardYearInput.value)
-  if (yearValidation !== true) {
-    showError(cardYearInput, yearValidation)
-    isValid = false
+    const yearValidation = isValidYear(cardYearInput.value)
+    if (yearValidation !== true) {
+      showError(cardYearInput, yearValidation)
+      isValid = false
+    }
+
+  if (monthValidation === true && yearValidation === true) {
+    if (!isFutureDate(cardMonthInput.value, cardYearInput.value)) {
+      showError(cardMonthInput, 'Card has expired')
+      showError(cardYearInput, '') // optional: clears error text from year
+      isValid = false
+    }
   }
 
   const cvcValidation = isValidCVC(cardCVCInput.value)
