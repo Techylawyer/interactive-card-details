@@ -176,7 +176,7 @@ form.addEventListener('submit', (e) => {
   if (monthValidation === true && yearValidation === true) {
     if (!isFutureDate(cardMonthInput.value, cardYearInput.value)) {
       showError(cardMonthInput, 'Card has expired')
-      showError(cardYearInput, '') // optional: clears error text from year
+      showError(cardYearInput, '')
       isValid = false
     }
   }
