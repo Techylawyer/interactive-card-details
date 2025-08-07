@@ -134,35 +134,12 @@ img {
   }
 }
 
-/* .visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.cvc-date {
+.error-message {
   display: flex;
-  justify-content: space-between;
-  gap: 5px;
-  input {
-    width: 100%;
-  }
+  text-transform:initial;
+  color: var(--red);
+  margin: -15px 0 20px 0;
 }
-
-.expiry-group {
-  display: flex;
-  flex-direction: column;
-  .input-date-group{
-    display: flex;
-    gap: 5px;
-  }
-  input {
-    width: 50%;;
-  }
-} */
 
 .cvc-date {
   display: flex;
@@ -196,6 +173,10 @@ input:focus {
 
 .hidden {
   display: none;
+}
+
+.error-border {
+  border: 1px solid var(--red) !important;
 }
 
 aside {
